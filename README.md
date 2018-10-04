@@ -21,8 +21,13 @@ With this webservice, you can:
 * download the raw GPX file of an existing track.
 
 ![Map](docs/selected-track.png "Show the map of a selected track")
+Show the map of a selected track
+
 ![Filter](docs/filter-tags.png "Filter the tracks based on tags")
+Filter the tracks based on tags
+
 ![Add](docs/add-track.png "Add a new track")
+Add a new track
 
 ## Installation
 This documentation describes how to install the service on a computer, running debian stable with python 3 and apache2. It might also work on different wsgi-servers.
