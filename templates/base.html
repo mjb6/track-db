@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<title>GPX Track Database</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/elements.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/roboto.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="{{ url_for('static', filename='jquery-3.3.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='semantic-ui/components/transition.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='semantic-ui/components/dropdown.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='semantic-ui/components/transition.min.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='semantic-ui/components/dropdown.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='semantic-ui/components/label.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='semantic-ui/components/icon.min.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='semantic-ui/components/button.min.css') }}" />
+
+
+<script src="{{ url_for('static', filename='leaflet-ele/d3.v3.min.js') }}" charset="utf-8"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='leaflet-ele/leaflet.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='leaflet-ele/dist/leaflet.elevation-0.0.4.css') }}" />
+<script type="text/javascript" src="{{ url_for('static', filename='leaflet-ele/leaflet.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='leaflet-ele/dist/leaflet.elevation-0.0.4.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='leaflet-ele/gpx.js') }}"></script>
+
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
+</style>
+
+<body class="w3-light-grey">
+
+<!-- Page Container -->
+<div class="w3-content w3-margin-top" style="max-width:1920px;">
+
+  <!-- The Grid -->
+  <div class="w3-row-padding">
+
+  {% with messages = get_flashed_messages(category_filter=["error"]) -%}
+      {% if messages -%}
+      <div class="w3-container w3-card w3-pale-red w3-margin-bottom">
+        <p class="w3-large w3-text-dark-grey">
+          <b>
+            <i class="fa fa-exclamation-triangle fa-fw w3-large w3-margin-right w3-text-red"></i>
+            {% for message in messages -%}
+            {{ message }}
+            {% endfor -%}
+          </b>
+        </p>
+      </div>
+      {% endif -%}
+  {% endwith -%}
+
+  {% with messages = get_flashed_messages(category_filter=["info"]) -%}
+      {% if messages -%}
+      <div class="w3-container w3-card w3-pale-green w3-margin-bottom">
+        <p class="w3-large w3-text-dark-grey">
+          <b>
+            <i class="fa fa-info-circle fa-fw w3-large w3-margin-right w3-text-dark-grey"></i>
+            {% for message in messages -%}
+            {{ message }}
+            {% endfor -%}
+          </b>
+        </p>
+      </div>
+      {% endif -%}
+  {% endwith -%}
+
+  {% block content %}
+  {% endblock %}
+
+  <!-- End Grid -->
+  </div>
+  
+  <!-- End Page Container -->
+</div>
+
+<footer class="w3-container w3-teal w3-center w3-margin-top">
+  <p>Fork me on <a href="https://github.com/mjbayer/track-db">github</a>.</p>
+</footer>
+
+</body>
+</html>

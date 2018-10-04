@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block content -%}
+    <!-- Left Column -->
+    <div class="w3-quarter">
+        <div class="w3-white w3-text-grey w3-card-4">
+            <div class="w3-container">
+                <p class="w3-xlarge"><b><i class="fa fa-compass fa-fw w3-xlarge w3-margin-right w3-text-teal"></i>TrackDB</b></p>
+                <p class="w3-large">Your own GPX Database.</p>
+                <hr>
+
+                <p class="w3-large"><b><i class="fa fa-filter fa-fw w3-large w3-margin-right w3-text-teal"></i>Filter</b></p>
+                <form method="POST">
+                    <select multiple="" name="tag-select" class="ui fluid dropdown">
+                        <option value="">Select Tags</option>
+                    {% for tag in tags -%}
+                        <option value='{{ tag.value }}'{% if tag.selected %} selected{% endif %}>{{ tag.value }}</option>
+                    {% endfor -%}
+                    </select>
+                    <script>
+                        $('.ui.dropdown')
+                          .dropdown()
+                        ;
+                    </script>
+                    <p>
+                        <input class="w3-btn-small w3-blue-grey" type="submit" value="Update"/>
+                    </p>
+
+                <p class="w3-large"><b><i class="fa fa-map fa-fw w3-large w3-margin-right w3-text-teal"></i>Matching Tracks</b></p>
+                    <select name="track-select" class="ui dropdown fluid" onchange="this.form.submit()">
+                        <option value="">Select track</option>
+                        {% for track in tracks -%}
+                        <option value="{{ loop.index -1 }}">{{ track.name }}</option>
+                        {% endfor -%}
+                    </select>
+                    <script>
+                        $('.ui.dropdown')
+                         .dropdown() ;
+                    </script>
+                </form>
+
+                <p class="w3-large"><b><i class="fa fa-line-chart fa-fw w3-large w3-margin-right w3-text-teal"></i>Statistics of matching Tracks</b></p>
+                    {% if track_id != None -%}
+                    <p>
+                        <i class="fa fa-map-marker fa-fw w3-margin-right w3-large w3-text-teal"></i>Distance: {{ mtr_to_dst(overall_statistics.distance_m) }} <br/>
+                        <i class="fa fa-clock-o fa-fw w3-margin-right w3-large w3-text-teal"></i>Duration (active): {{ sec_to_date(overall_statistics.duration) }}<br/>
+                        <i class="fa fa-tachometer fa-fw w3-margin-right w3-large w3-text-teal"></i>Max. Speed:  {{ overall_statistics.max_speed }} km/h<br/>
+                        <i class="fa fa-bar-chart fa-fw w3-margin-right w3-large w3-text-teal"></i>Avg. Speed: {{ "%.2f"|format(overall_statistics.avg_speed) }} km/h<br/>
+                        <i class="fa fa-arrow-up fa-fw w3-margin-right w3-large w3-text-teal"></i>Elevation up: {{ mtr_to_dst(overall_statistics.elevation_up_m) }}<br/>
+                        <i class="fa fa-arrow-down fa-fw w3-margin-right w3-large w3-text-teal"></i>Elevation down: {{ mtr_to_dst(overall_statistics.elevation_down_m) }}<br/>
+                    </p>
+                    {% endif -%}
+                    <hr>
+
+                    <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i><a href="{{ url_for('add') }}">Add new Track</a></b></p>
+                    <br>
+            </div>
+        </div><br>
+
+        <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+    <div class="w3-threequarter">
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+            {% if track_id == None -%}
+            <p class="w3-xlarge w3-text-grey"><b><i class="fa fa-info-circle fa-fw w3-xlarge w3-margin-right w3-text-teal"></i>No suitable track found. Add Tracks or change Tag selection.</b></p>
+            {% else -%}
+            <p class="w3-xlarge w3-text-grey"><b><i class="fa fa-heartbeat fa-fw w3-xlarge w3-margin-right w3-text-teal"></i>Activity: {{ tracks[track_id].name }}</b></p>
+            <p class="w3-large w3-text-grey"><b><i class="fa fa-calendar fa-fw w3-large w3-margin-right w3-text-teal"></i>Date: {{ tracks[track_id].date }}</b></p>
+
+            <p>
+            {% for tag in tags_for_track -%}
+                <span class="ui grey basic button">{{ tag.value }}</span>
+            {% endfor -%}
+            </p>
+
+            <div id="map"></div>
+
+            <p class="w3-xlarge w3-text-grey"><b><i class="fa fa-line-chart fa-fw w3-large w3-margin-right w3-text-teal"></i>Statistics</b></p>
+            <p>
+                <i class="fa fa-map-marker fa-fw w3-margin-right w3-large w3-text-teal"></i>Distance: {{ mtr_to_dst(tracks[track_id].statistics[0].distance_m) }} <br/>
+                <i class="fa fa-heartbeat fa-fw w3-margin-right w3-large w3-text-teal"></i>Duration (active): {{ sec_to_date(tracks[track_id].statistics[0].duration_s) }}<br/>
+                <i class="fa fa-clock-o fa-fw w3-margin-right w3-large w3-text-teal"></i>Duration (total): {{ sec_to_date(tracks[track_id].statistics[0].duration_total_s) }}<br/>
+                <i class="fa fa-tachometer fa-fw w3-margin-right w3-large w3-text-teal"></i>Max. Speed: {{ tracks[track_id].statistics[0].max_speed }} km/h<br/>
+                <i class="fa fa-bar-chart fa-fw w3-margin-right w3-large w3-text-teal"></i>Avg. Speed: {{ "%.2f"|format(tracks[track_id].statistics[0].avg_speed) }} km/h<br/>
+                <i class="fa fa-arrow-up fa-fw w3-margin-right w3-large w3-text-teal"></i>Elevation up: {{ mtr_to_dst(tracks[track_id].statistics[0].elevation_up_m) }}<br/>
+                <i class="fa fa-arrow-down fa-fw w3-margin-right w3-large w3-text-teal"></i>Elevation down: {{ mtr_to_dst(tracks[track_id].statistics[0].elevation_down_m) }}<br/>
+            </p>
+            <hr/>
+
+            <p class="w3-xlarge w3-text-grey"><b><i class="fa fa-cogs fa-fw w3-large w3-margin-right w3-text-teal"></i>Resource</b></p>
+            <ul>
+                <li><a href="{{url_for('static', filename=tracks[track_id].path)}}">Download GPX</a></li>
+                <li><a href="{{url_for('delete', track_id=tracks[track_id].id)}}" class="confirm">Delete Track</a></li>
+                <li><a href="#">Modify Tags </a></li>
+            </ul>
+            {% endif -%}
+            <script type="text/javascript">
+                // delete button: show confirmation popup
+                $(function() {
+                    $('.confirm').click(function() {
+                    return window.confirm("Are you sure?");
+                    });
+                });
+
+                // Map: configuration
+                var map = new L.Map('map');
+
+                var url = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+                    attr ='Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+                    service = new L.TileLayer(url, {maxZoom: 17, attribution: attr});
+
+                var el = L.control.elevation();
+                el.addTo(map);
+                var g=new L.GPX("{{url_for('static', filename=tracks[track_id].path)}}", {
+                    async: true,
+                    marker_options: {
+                        startIconUrl: "{{ url_for('static', filename='leaflet-ele/pin-icon-start.png') }}",
+                        endIconUrl: "{{ url_for('static', filename='leaflet-ele/pin-icon-end.png') }}",
+                        shadowUrl: "{{ url_for('static', filename='leaflet-ele/pin-shadow.png') }}"
+                    }
+                });
+                g.on('loaded', function(e) {
+                        map.fitBounds(e.target.getBounds());
+                });
+                g.on("addline",function(e){
+                    el.addData(e.line);
+                });
+                g.addTo(map);
+                map.addLayer(service);
+            </script>
+        </div>
+    <!-- End Right Column -->
+    </div>
+{% endblock %}

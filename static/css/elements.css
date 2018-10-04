@@ -1,0 +1,8 @@
+/* Map related elements */
+
+#map {
+    width:100%;
+    height:650px;
+    display:inline-block;
+    vertical-align:top;
+}
