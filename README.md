@@ -47,7 +47,7 @@ The services requires some python modules. Install them with pip3:
 Go to your webserver directory `/var/www` and download the sources, either by running `git clone https://github.com/mjbayer/track-db.git` or by downloading manually the zipped sources from github. If latter, unzip the archive.
 
 
-## Configure to Webserver
+## Configure the Webserver
 Create a new apache site configuration for trackdb. Add it to your available apache sites, by creating the following text file:
 
 `/etc/apache2/sites-available/trackdb.conf`
