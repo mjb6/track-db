@@ -94,7 +94,6 @@
                 <li><a href="{{url_for('delete', track_id=tracks[track_id].id)}}" class="confirm">Delete Track</a></li>
                 <li><a href="#">Modify Tags </a></li>
             </ul>
-            {% endif -%}
             <script type="text/javascript">
                 // delete button: show confirmation popup
                 $(function() {
@@ -129,6 +128,7 @@
                 g.addTo(map);
                 map.addLayer(service);
             </script>
+            {% endif -%}
         </div>
     <!-- End Right Column -->
     </div>
