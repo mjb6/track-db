@@ -109,6 +109,7 @@ In addition, you need an .htpassword file, that you can generate with the comman
 Check out `htpassword -h` for details.
 
 
+
 # Development
 This is my first web project ever. I had to learn most of the technologies from scratch. The project was started during a boring, bad-weather vacation. The code looks accordingly.
 
@@ -139,9 +140,9 @@ I just get the message "No suitable track found. Add Tracks or change Tag select
 * If you use the filter, make sure a track matches your selected tags.
 
 I run trackdb on an ARM device with apache + mod_wsgi. I get upload errors for gpx files >64KB:
-* I'm looking into this issue and will update the documentation as soon as this is resolved. In the meantime, either:
-    * deploy it to a x86/amd64 machine
-    * do not use apache + mod_wsgi but some other wsgi server
+* This is a funny issue. With my limited time I was not able to understand what's going on. If you have experience in debugging apache modules, feel free to help here out :) In the meantime: 
+* Try running flask with gunicorn instead. You can directly start gunicorn with main.py: `gunicorn main` in the root folder of track-db. Besides that, you only need a reverse proxy (e.g. apache mod_proxy_http or nginx) and a script, that starts gunicorn on system startup. For more information, see http://docs.gunicorn.org/en/19.6.0/deploy.html
+* If you want to access the application from a different url-path, configure the app object, as you can see in the uncommented line in app.py (`app.wsgi_app = ReverseProxied(app.wsgi_app, script_name="/trackdb-test")`). This is based on the description: http://blog.macuyiko.com/post/2016/fixing-flask-url_for-when-behind-mod_proxy.html
 
 
 # TODO

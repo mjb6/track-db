@@ -40,7 +40,7 @@ def utility_processor():
     return dict(mtr_to_dst=mtr_to_dst, sec_to_date=sec_to_date)
 
 
-@app.route("/show", methods=["GET", "POST"])
+@app.route("/show/", methods=["GET", "POST"])
 def show():
     tags = Tag.select(Tag.value).distinct().order_by(Tag.value.asc())  #pylint: disable=E1111
     
@@ -89,7 +89,7 @@ def show():
     return render_template("show.html", tracks=tracks, tags=tags, tags_for_track=tags_for_track, track_id=track_id, overall_statistics=overall_statistics)
 
 
-@app.route("/delete/<int:track_id>")
+@app.route("/delete/<int:track_id>/")
 def delete(track_id):
     track = Track.get(Track.id == track_id)
     track_name = track.name
@@ -101,7 +101,7 @@ def delete(track_id):
     return redirect(url_for("show"))
 
 
-@app.route("/add", methods=["GET", "POST"])
+@app.route("/add/", methods=["GET", "POST"])
 def add():
     tags = Tag.select(Tag.value).distinct()  #pylint: disable=E1111
 
